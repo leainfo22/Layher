@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LayherDelPacifico.Core.DTO
+namespace LayherDelPacifico.Core.DTO.Documents
 {
-    public class TypeDoc
+    public class TypesDocument
     {
-        public Dictionary<string, string> tipoDeDoc { get; set; }
+        public List<Documents> Documents { get; set; }
     }
 }

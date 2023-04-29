@@ -8,6 +8,6 @@ namespace LayherDelPacifico.Core.DTO
 {
     public class NLogConfiguration
     {
-        public int NLogLevel { get; set; }  
+        public string NLogLevel { get; set; }  
     }
 }
