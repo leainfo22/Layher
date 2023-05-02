@@ -44,7 +44,7 @@ namespace LayherDelPacifico.Infrastructure.Repository
 			{
 				var sql = String.Format(@"SELECT Id FROM Hub.Empresas WHERE Rut={0}",rutEmisor);
 				var idEmpresa = await _connection.QueryAsync<IdEmpresa>(sql);
-				return idEmpresa.First().Id;
+				return idEmpresa.First().Id;		
 			}
 			catch (Exception ex)
 			{

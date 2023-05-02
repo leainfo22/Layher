@@ -15,22 +15,25 @@ namespace LayherDelPacifico.Core.Services
         private static string? _pathOut;
         private static ILogger? _logger;
         private readonly IAgiliceDataBase _agiliceDataBaseRepository;
+        private readonly ILayFtp _layFtp;
         private readonly IDictionary<string,string> _tipoDoc;
-
+        private  FtpConfiguration _ftpConfig;
         private static FileSystemWatcher watcher;
 
 
-        public WatcherFolder(IAgiliceDataBase agiliceDataBaseRepository, IDictionary<string, string> tipoDoc)
+        public WatcherFolder(IAgiliceDataBase agiliceDataBaseRepository, IDictionary<string, string> tipoDoc,ILayFtp layFtp)
         {
             _agiliceDataBaseRepository = agiliceDataBaseRepository;
             _tipoDoc = tipoDoc;
+            _layFtp = layFtp;
         }
-        public async Task Watcher(string pathIn, string pathOut, ILogger logger)
+        public async Task Watcher(PathsConfiguration pathConfig, FtpConfiguration ftpConfig, ILogger logger)
         {
-            _pathIn = pathIn;
-            _pathOut = pathOut;
+            _ftpConfig = ftpConfig;
+            _pathIn = pathConfig.PathIn;
+            _pathOut = pathConfig.PathOut;
             _logger = logger;
-            watcher = new FileSystemWatcher() { Path = pathIn };
+            watcher = new FileSystemWatcher() { Path = _pathIn };
             watcher.IncludeSubdirectories = true;
             watcher.Created += new FileSystemEventHandler(OnChanged);
             watcher.Error += new ErrorEventHandler(WatcherError);
@@ -78,7 +81,7 @@ namespace LayherDelPacifico.Core.Services
             if (!File.Exists(Path.Combine(_pathOut, outputFileName)))
             {
                 TryToCopyFile(path, Path.Combine(_pathOut, outputFileName));
-
+                _layFtp.UploadFile(_ftpConfig, path, outputFileName);
             }
         }
 

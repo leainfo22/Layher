@@ -8,7 +8,7 @@ using LayherDelPacifico.Infrastructure.Repository;
 using LayherDelPacifico.Worker;
 using NLog.Extensions.Logging;
 using System.Linq;
-
+using System.Net;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
@@ -16,11 +16,15 @@ IHost host = Host.CreateDefaultBuilder(args)
         var dbConfig = context.Configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>();
         var pathConfig = context.Configuration.GetSection("PathsConfiguration").Get<PathsConfiguration>();
         var documentList = context.Configuration.GetSection("TypesDocument").Get<TypesDocument>();
+        var ftpConfig = context.Configuration.GetSection("FtpConfiguration").Get<FtpConfiguration>();
 
         services.AddSingleton<IAgiliceDataBase, AgiliceDataBase>();
         services.AddSingleton<IWatcherFolder, WatcherFolder>();
         services.AddSingleton<IDbConnection>((sp) => new SqlConnection(dbConfig.AgiliceConnectionString));
         services.AddSingleton<IDictionary<string, string>>((dictionary) => documentList.Documents.ToDictionary(x => x.Name, x => x.Type));
+        services.AddSingleton<ILayFtp, LayFtp>();
+
+
         services.AddHostedService<Worker>();
 
     }).UseWindowsService(options =>

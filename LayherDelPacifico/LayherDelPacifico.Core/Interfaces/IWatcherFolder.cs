@@ -1,10 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using LayherDelPacifico.Core.DTO;
+using Microsoft.Extensions.Logging;
 
 
 namespace LayherDelPacifico.Core.Interfaces
 {
     public interface IWatcherFolder
     {
-        public Task Watcher(string pathIn, string pathOut, ILogger logger);
+        public Task Watcher(PathsConfiguration pathConfig, FtpConfiguration ftpConfig, ILogger logger);
     }
 }
