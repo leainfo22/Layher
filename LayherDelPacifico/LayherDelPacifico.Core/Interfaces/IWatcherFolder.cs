@@ -6,6 +6,6 @@ namespace LayherDelPacifico.Core.Interfaces
 {
     public interface IWatcherFolder
     {
-        public Task Watcher(PathsConfiguration pathConfig, FtpConfiguration ftpConfig, ILogger logger);
+        public Task Watcher(PathsConfiguration pathConfig, FtpConfiguration ftpConfig, ILogger logger, string rutsEmisores);
     }
 }

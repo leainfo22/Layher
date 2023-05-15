@@ -11,11 +11,13 @@ namespace LayherDelPacifico.Worker
     {
         private readonly IWatcherFolder _watcherFolder;
         private readonly IConfiguration _configuration;
+        private readonly IPurgeLog _purgeLog;
         private readonly ILogger<Worker> _logger;
-        public Worker(ILogger<Worker> logger, IConfiguration configuration, IWatcherFolder watcherFolder)
+        public Worker(ILogger<Worker> logger, IConfiguration configuration, IWatcherFolder watcherFolder, IPurgeLog purgeLog)
         {
             _configuration = configuration;
             _watcherFolder = watcherFolder;
+            _purgeLog = purgeLog;
             _logger = logger;
         }
 
@@ -27,7 +29,10 @@ namespace LayherDelPacifico.Worker
                 {
                     var pathConfig = _configuration.GetSection("PathsConfiguration").Get<PathsConfiguration>();
                     var ftpConfig = _configuration.GetSection("FtpConfiguration").Get<FtpConfiguration>();
-                    await _watcherFolder.Watcher(pathConfig, ftpConfig, _logger);
+                    var rutsEmisores = _configuration.GetSection("RutsEmisores").Get<RutsEmisores>();
+                    var logConfig = _configuration.GetSection("NLogConfiguration").Get<NLogConfiguration>();
+                    await _watcherFolder.Watcher(pathConfig, ftpConfig, _logger,rutsEmisores.Ruts);
+                    await _purgeLog.Purge(logConfig.LogPath, logConfig.MaxFiles);
                     await Task.Delay(Timeout.Infinite, stoppingToken);
                 }
                 catch (Exception ex)
@@ -35,7 +40,6 @@ namespace LayherDelPacifico.Worker
                     Console.WriteLine(ex.Message);
                     _logger.LogInformation(ex.Message, ex);
                 }
-
             }
         }
     }

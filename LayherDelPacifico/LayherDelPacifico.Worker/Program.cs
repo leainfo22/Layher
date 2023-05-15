@@ -20,10 +20,10 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         services.AddSingleton<IAgiliceDataBase, AgiliceDataBase>();
         services.AddSingleton<IWatcherFolder, WatcherFolder>();
+        services.AddSingleton<IPurgeLog, PurgeLog>();
         services.AddSingleton<IDbConnection>((sp) => new SqlConnection(dbConfig.AgiliceConnectionString));
         services.AddSingleton<IDictionary<string, string>>((dictionary) => documentList.Documents.ToDictionary(x => x.Name, x => x.Type));
         services.AddSingleton<ILayFtp, LayFtp>();
-
         services.AddHostedService<Worker>();
 
     }).UseWindowsService(options =>
