@@ -24,7 +24,6 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<IDictionary<string, string>>((dictionary) => documentList.Documents.ToDictionary(x => x.Name, x => x.Type));
         services.AddSingleton<ILayFtp, LayFtp>();
 
-
         services.AddHostedService<Worker>();
 
     }).UseWindowsService(options =>
