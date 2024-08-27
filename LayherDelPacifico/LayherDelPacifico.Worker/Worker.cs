@@ -26,7 +26,7 @@ namespace LayherDelPacifico.Worker
             while (!stoppingToken.IsCancellationRequested)
             {
                 try
-                {
+                {                    
                     var pathConfig = _configuration.GetSection("PathsConfiguration").Get<PathsConfiguration>();
                     var ftpConfig = _configuration.GetSection("FtpConfiguration").Get<FtpConfiguration>();
                     var rutsEmisores = _configuration.GetSection("RutsEmisores").Get<RutsEmisores>();
